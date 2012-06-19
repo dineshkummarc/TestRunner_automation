@@ -1,0 +1,26 @@
+HKCR
+{
+	TestCore.CTestSuite.1 = s 'CTestSuite Class'
+	{
+		CLSID = s '{74CDEBBB-818D-11D3-ABF5-00508B0D0D6E}'
+	}
+	TestCore.CTestSuite = s 'CTestSuite Class'
+	{
+		CLSID = s '{74CDEBBB-818D-11D3-ABF5-00508B0D0D6E}'
+		CurVer = s 'TestCore.CTestSuite.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {74CDEBBB-818D-11D3-ABF5-00508B0D0D6E} = s 'CTestSuite Class'
+		{
+			ProgID = s 'TestCore.CTestSuite.1'
+			VersionIndependentProgID = s 'TestCore.CTestSuite'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{74CDEBD4-818D-11D3-ABF5-00508B0D0D6E}'
+		}
+	}
+}

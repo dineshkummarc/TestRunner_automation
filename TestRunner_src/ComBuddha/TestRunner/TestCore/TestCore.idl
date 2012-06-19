@@ -1,0 +1,117 @@
+// 
+//                Jerry Edens & Doug Eveland
+//         Copyright(c) 1999 All Rights Reserved 
+// 
+// This code may be used in compiled form for non-profit
+// purposes and the source code may be redistributed 
+// unmodified by any means providing it is not sold for 
+// profit, unless written consent is granted by the 
+// authors, and providing that this notice and the 
+// authors names are included.
+//
+// If you find any bugs or make any modifications please
+// send them to me for incorporation into the code.
+//
+// This file is provided "as is" with out expressed or 
+// implied warranty.
+//
+// Contact me if you have any questions, comments, or 
+// bug reports at jerrye@home.com
+//
+// ----------------------[ Revision Control ]---------------------------
+// Author: Jerry Edens
+// $Date: $
+// $Modtime: $
+// $NoKeywords: $
+// ---------------------------------------------------------------------
+//
+
+// TestCore.idl : IDL source for TestCore.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (TestCore.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+// Microsoft supplied idl...
+import "ComCat.idl";
+		
+import "ITestOutput.idl";
+import "IEnumTestSuites.idl";
+import "IEnumTestSuiteItems.idl";
+import "ITestSuite.idl";
+import "ITestSuiteItem.idl";
+import "ITestSuiteCollection.idl";
+import "ITestSuiteItemCollection.idl";
+#include "ITest.idl"
+   
+[
+	uuid(74CDEBD4-818D-11D3-ABF5-00508B0D0D6E),
+	version(1.0),
+	helpstring("TestCore 1.0 Type Library")
+]
+library TESTCORELib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	interface ITestOutput;
+	interface ITest;
+	interface IEnumTestSuites;
+	interface ITestSuite;
+	interface IEnumTestSuiteItems;
+	interface ITestSuiteItem;
+	interface ICustomTestSuiteItem;
+	interface IDirectLoad;
+	interface ITestSuiteItemCollection;
+	interface ITestSuiteCollection;
+
+
+	//	CoClass for ITestOutput
+	[
+		uuid(74CDEBC3-818D-11D3-ABF5-00508B0D0D6E),
+		helpstring("CTestOutput Class")
+	]
+	coclass CTestOutput
+	{
+		[default] interface ITestOutput;
+	};
+	//	CoClass for ITestSuite
+	[
+		uuid(74CDEBBB-818D-11D3-ABF5-00508B0D0D6E),
+		helpstring("CTestSuite Class")
+	]
+	coclass CTestSuite
+	{
+		[default] interface ITestSuite;
+	};
+	//	CoClass for CTestSuiteItem
+	[
+		uuid(74CDEBB9-818D-11D3-ABF5-00508B0D0D6E),
+		helpstring("CTestSuiteItem Class")
+	]
+	coclass CTestSuiteItem
+	{
+		[default] interface ITestSuiteItem;
+		interface ICustomTestSuiteItem;
+	};
+	//	CoClass for ITestSuiteCollection
+	[
+		uuid(74CDEBBE-818D-11D3-ABF5-00508B0D0D6E),
+		helpstring("CTestSuiteCollection Class")
+	]
+	coclass CTestSuiteCollection
+	{
+		[default] interface ITestSuiteCollection;
+	};
+	//	CoClass for CTestSuiteItemCollection
+	[
+		uuid(74CDEBB6-818D-11D3-ABF5-00508B0D0D6E),
+		helpstring("CTestSuiteItemCollection Class")
+	]
+	coclass CTestSuiteItemCollection
+	{
+		[default] interface ITestSuiteItemCollection;
+	};
+};

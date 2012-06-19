@@ -1,0 +1,85 @@
+>CliniVisionTest Overview
+ClinivisionTest provides an easy-to-user interface for executing unit tests.  All tests 
+can be organized into one or more test suites.  Each test suite contains one or more test suites
+or tests.  Each set of tests defined in CliniVisionTest can be saved in a file for later use.
+
+The application's user interface is divided into three views or panes.  On the left side of the user interface
+is the 'Test View' which contains a list of all COM objects which support the cvITest interface.  The upper
+right view is the 'Test Suite View'.  That view contains a tree containing a hierarchical organization of
+all of the test suites and tests.  The lower right view is the 'Results View'.  This view contains the output 
+resulting from a test run of one or more test suites or tests displayed in the 'Test Suite View'.
+
+{image:clinivisiontest}
+
+Select the tests to run by opening an existing file using the 'File/Open' menu item.  When the 
+test file is opened the 'Test Suite View' is updated to display the hierarchy of tests suites and tests
+which were contained in the test file.  A small check mark just to the left of each test suite or test node
+indicates whether a test suite or test will be run.  The check mark can be toggled by clicking in the check box with 
+the mouse or by selecting the node and then pressing the spacebar.  Test Suites or tests which are not 'selected'
+(i.e. the checkmark is present) will not be executed.  
+
+The default file extension for Clinivision test files is '.cvtest'.
+Test files are saved as Extended Markup Language (XML). A sample test file appears below.
+
+      <?xml:stylesheet type='text/xsl' href='ClinivisionTests.xsl'?>
+      <TESTSUITES>
+            <TESTSUITE>
+                  <NAME>Smoke Test</NAME>
+                  <RUNCOUNT>1</RUNCOUNT>
+                  <SELECTED>1</SELECTED>
+                  <TEST>
+                        <NAME>TestComponent1</NAME>
+                        <SELECTED>1</SELECTED>
+                        <CLSID>{EC86425F-8321-11D3-ABF8-00508B0D0D6E}</CLSID>
+                  </TEST>
+                  <TEST>
+                        <RUNCOUNT>1</RUNCOUNT>
+                        <SELECTED>1</SELECTED>
+                        <CLSID>{EC864261-8321-11D3-ABF8-00508B0D0D6E}</CLSID>
+                  </TEST>
+	     </TESTSUITE>
+      </TESTSUITES>
+
+{html:<H1>Creating A Sample Test Suite</H1>}
++ Start ClinivisionTest
++ Select the Test Suite View by clicking the mouse in the upper right hand pane.
++ Select the 'File/New Suite' menu item (or press INS) to create a new suite. 
+A new test suite named 'New Suite' should appear.
++ Give the test suite a new name (e.g. 'My Test') by selecting the 'New Suite' node then pressing the right
+mouse button and selecting the 'Rename' menu item.  The name can also be modified by double-clicking on the node
+and changing the name on the 'Edit Test Suite' dialog.
++ Modify the Run Count from 0 to 1 by double-clicking on the new test suite node.
+Change the 'Run Count' value from 0 to 1.
++ Drag a test from the 'Test View' pane to the test suite you was just created. Double-click on the test
+and change the 'Run Count' value from 0 to 10.
++ Save the test information by selecting the 'File/Save' menu item.
+ 
+{html:<H1>Running A Test Suite</H1>}
++ Start ClinivisionTest.
++ Select the 'File/Open menu' item to open a test file.
++ Select a test suite in the Test Suite view.
++ Select the 'File/Run Test(s)' menu item to execute the test suite.  All tests at or below the selected node 
+will be run.  No tests will be run below a node which is unselected (check mark is missing).
++ The results of the test suite will appear in the 'Results View' window.
+
+{html:<H1>Tips For Using CliniVisionTest</H1>}
+{html:<H3>Test Suite View Keyboard Help</H1>}
++ INS - Creates a new Test Suite node.
++ DEL - Creates the selected Test Suite or Test node.
++ Plus (+) - Increments the Test Suite or Test Run Count.
++ Minus (+) - Decrements the Test Suite or Test Run Count.
++ Spacebar - toggles the check mark on the selected Test Suite or Test node.
+
+>View Classes
+These are classes which are used to display information to the user.
+
+>Document Classes
+The cvCTestDoc class is responsible for serializing test and test suite information to and from
+an XML file
+
+>Dialog Classes
+These are CDialog-based classes used to present information to the user. These
+classes also generally allow the user to modify the information which is presented.
+
+>Helper Classes
+These are classes which provide support functionality for the other, major, classes.

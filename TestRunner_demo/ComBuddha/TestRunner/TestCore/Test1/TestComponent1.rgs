@@ -1,0 +1,42 @@
+HKCR
+{
+	Test1.TestComponent1.1 = s 'TestComponent1 Class'
+	{
+		CLSID = s '{EC86425F-8321-11D3-ABF8-00508B0D0D6E}'
+	}
+	Test1.TestComponent1 = s 'TestComponent1 Class'
+	{
+		CLSID = s '{EC86425F-8321-11D3-ABF8-00508B0D0D6E}'
+		CurVer = s 'Test1.TestComponent1.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {EC86425F-8321-11D3-ABF8-00508B0D0D6E} = s 'TestComponent1 Class'
+		{
+			ProgID = s 'Test1.TestComponent1.1'
+			VersionIndependentProgID = s 'Test1.TestComponent1'
+			ForceRemove 'Programmable'
+            'Implemented Categories' = s ''
+            {
+                {50105161-8295-11d3-ABF6-00508B0D0D6E} = s 'Automated Test (cvITest)'
+            }
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{EC864250-8321-11D3-ABF8-00508B0D0D6E}'
+			'Test Information' = s ''
+			{
+			    val TestName = s 'TestComponent1'
+			    val Description = s 'Automated Test for TestComponent1'
+			}
+		}						
+	}
+    NoRemove 'Component Categories'
+    {           
+       NoRemove {50105161-8295-11d3-ABF6-00508B0D0D6E} 
+       {
+          val 409 = s 'Automated Test (cvITest)'
+       }
+    }
+}

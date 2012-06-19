@@ -1,0 +1,175 @@
+// 
+//                Jerry Edens & Doug Eveland
+//         Copyright(c) 1999 All Rights Reserved 
+// 
+// This code may be used in compiled form for non-profit
+// purposes and the source code may be redistributed 
+// unmodified by any means providing it is not sold for 
+// profit, unless written consent is granted by the 
+// authors, and providing that this notice and the 
+// authors names are included.
+//
+// If you find any bugs or make any modifications please
+// send them to me for incorporation into the code.
+//
+// This file is provided "as is" with out expressed or 
+// implied warranty.
+//
+// Contact me if you have any questions, comments, or 
+// bug reports at jerrye@home.com
+//
+// ----------------------[ Revision Control ]---------------------------
+// $Archive: $
+// $Revision: 5$
+// $Author: Jerry Edens$
+// $Date: 11/10/99 5:38:09 PM$
+// $Modtime: $
+// $NoKeywords: $
+// ---------------------------------------------------------------------
+//
+
+// 
+// The dispid's are numbered in accordance with the following table
+// from COM IDL & Interface Design, Dr. Al Major, page 107:
+//   
+// or
+// 
+// MSDN  Midl Language Reference : search for id
+//
+//  _________________________________________________________________
+// | Bits    | Value                                                 |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 0  - 15 | Offset.  Any value is permissible.                    |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 16 - 21 | The nesting level of this type of information in the  |
+// |         | inheritance hierarchy.  The nesting level goes as     |
+// |         | follows: IUnknown = 0, IDispatch = 1, and any dual    |
+// |         | interface (inherits from IDispatch) or Automation = 2.|
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 22 - 25 | Reserved and must be ZERO.                            |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 26 - 28 | DISPID value.  Used to aggregate related DISPIDs.     |
+// |         | This value is typically 0 in user code.               |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// |    29   | TRUE if this is the ID for a method, otherwise FALSE, |
+// |         | This will always be 1 if you want to be consistent    |
+// |         | the numbering scheme for dual interfaces, which can   |
+// |         | only use this syntax for properties.                  |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 30 - 31 | Must be 01 (that is, positive)                        |
+// |_________|_______________________________________________________|
+//   
+// Example:
+// [propget] long lMyProp();
+// 
+// 0x60020001
+//    01     1  000   0000 000010 0000000000000001
+// |31 - 30|29|28-26|25-22|21-16 |15-0            |
+//
+
+//	Group = Core Interfaces
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+import "ComCat.idl";
+
+
+	//
+	//	Description
+	//		Used to hold information about a test suite item.
+	//
+	[
+		object,
+		uuid(74CDEBE9-818D-11D3-ABF5-00508B0D0D6E),
+		dual,
+		helpstring("ITestSuiteItem Interface"),
+		pointer_default(unique)
+	]
+	interface ITestSuiteItem : IDispatch
+	{
+		//
+		// Description:
+		//		Returns the desctription for this component.  This description or 
+		//		a part of it can be used for the display name by the GUI.
+		//
+	  	[propget, id(0x60020001), helpstring("property Description - returns the desctription for this component.  This description or a part of it can be used for the display name by the GUI")] 
+				HRESULT Description([out, retval] BSTR* pDescription);
+		//
+		//	Description:
+		//		Returns the desctription for this component.  This description 
+		//		or a part of it can be used for the display name by the GUI.
+		//
+		[propput, id(0x60020001), helpstring("property Description - returns the desctription for this component.  This description or a part of it can be used for the display name by the GUI")] 
+				HRESULT Description([in] BSTR newDescription);
+		//
+		//	Description:
+		//		Returns the clsid for this component in the form of a Progid
+		//
+		[propget, id(0x60020002), helpstring("property Clsid - returns the clsid for this component in the form of a Progid")] 
+				HRESULT ProgId([out, retval] BSTR* pProgId);
+		//
+		//	Description:
+		//		Sets the clsid for this component from it's Progid
+		//
+		[propput, id(0x60020002), helpstring("property Clsid - sets the clsid for this component from it's Progid")] 
+				HRESULT ProgId([in] BSTR newProgId);
+		//
+		//	Description:
+		//		Retrieves the number of times this item is to be tested.
+		//
+		[propget, id(0x60020003), helpstring("property RunCount - Retrieves the number of times this item is to be tested.")] 
+				HRESULT RunCount([out, retval] long *pRunCount);
+		//
+		//	Description:
+		//		Sets the number of times this item is to be tested.
+		//
+		[propput, id(0x60020003), helpstring("property RunCount - Sets the number of times this item is to be tested.")] 
+				HRESULT RunCount([in] long newRunCount);
+		//
+		//	Description:
+		//		Retrieves the name associated with this test.
+		//
+		[propget, id(1), helpstring("property TestName - Retrieves the name associated with this test.")] 
+				HRESULT TestName([out, retval] BSTR *pTestName);
+		//
+		//	Description:
+		//		Sets the name associated with this test.
+		//
+		[propput, id(1), helpstring("property TestName - Sets the name associated with this test.")] 
+				HRESULT TestName([in] BSTR newTestName);
+	};
+
+	//	
+	//	Description:
+	//		Used to hold non-automation compatable information about the test suite item.
+	//	
+	[
+		object,
+		uuid(CF0389A1-8252-11d3-ABF5-00508B0D0D6E),
+		helpstring("ICustomTestSuiteItem non-Automation Interface"),
+		pointer_default(unique)
+	]
+	interface ICustomTestSuiteItem : IUnknown
+	{
+		//
+		//	Description:
+		//		Returns the class id in the form of a CLSID (GUID)
+		//
+		[propget, id(0x60010001), helpstring("property Clsid - returns the class id in the form of a CLSID (GUID)")] 
+				HRESULT Clsid([out, retval] CLSID* pClsId);
+		//
+		//	Description:
+		//		Sets the class id in the form of a CLSID (GUID)
+		//
+		[propput, id(0x60010001), helpstring("property Clsid - sets the class id in the form of a CLSID (GUID)")] 
+				HRESULT Clsid([in] CLSID newClsId);
+	};
+
+

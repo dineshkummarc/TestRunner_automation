@@ -1,0 +1,71 @@
+// Test1.idl : IDL source for Test1.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (Test1.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+midl_pragma warning(disable : 2039)
+
+[
+	uuid(EC864250-8321-11D3-ABF8-00508B0D0D6E),
+	version(1.0),
+	helpstring("Test1 1.0 Type Library")
+]
+library TEST1Lib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+	importlib("..\TestCore.tlb");
+
+	[
+		object,
+		uuid(EC86425E-8321-11D3-ABF8-00508B0D0D6E),
+		dual,
+		helpstring("ITestComponent1 Interface"),
+		pointer_default(unique)
+	]
+	interface ITestComponent1 : ITest
+	{
+		[propget, id(0x60030001), helpstring("property bstrPropName")] 
+				HRESULT bstrPropName([out, retval] BSTR *pVal);
+		[propput, id(0x60030001), helpstring("property bstrPropName")] 
+				HRESULT bstrPropName([in] BSTR newVal);
+		[propget, id(0x60030002), helpstring("property Count")] 
+				HRESULT Count([out, retval] long *pVal);
+		[propput, id(0x60030002), helpstring("property Count")] 
+				HRESULT Count([in] long newVal);
+	};
+
+	[
+		object,
+		uuid(EC864260-8321-11D3-ABF8-00508B0D0D6E),
+		dual,
+		helpstring("ITestComponent2 Interface"),
+		pointer_default(unique)
+	]
+	interface ITestComponent2 : ITest
+	{
+	};
+
+	[
+		uuid(EC86425F-8321-11D3-ABF8-00508B0D0D6E),
+		helpstring("TestComponent1 Class")
+	]
+	coclass TestComponent1
+	{
+		[default] interface ITestComponent1;
+	};
+	[
+		uuid(EC864261-8321-11D3-ABF8-00508B0D0D6E),
+		helpstring("TestComponent2 Class")
+	]
+	coclass TestComponent2
+	{
+		[default] interface ITestComponent2;
+	};
+};
+
+midl_pragma warning(default : 2039)

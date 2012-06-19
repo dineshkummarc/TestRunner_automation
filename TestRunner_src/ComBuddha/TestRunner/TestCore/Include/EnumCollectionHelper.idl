@@ -1,0 +1,182 @@
+// 
+//                Jerry Edens & Doug Eveland
+//         Copyright(c) 1999 All Rights Reserved 
+// 
+// This code may be used in compiled form for non-profit
+// purposes and the source code may be redistributed 
+// unmodified by any means providing it is not sold for 
+// profit, unless written consent is granted by the 
+// authors, and providing that this notice and the 
+// authors names are included.
+//
+// If you find any bugs or make any modifications please
+// send them to me for incorporation into the code.
+//
+// This file is provided "as is" with out expressed or 
+// implied warranty.
+//
+// Contact me if you have any questions, comments, or 
+// bug reports at jerrye@home.com
+//
+// ----------------------[ Revision Control ]---------------------------
+// Author: Jerry Edens
+// $Date: $
+// $Modtime: $
+// $NoKeywords: $
+// ---------------------------------------------------------------------
+//
+
+// The dispid's are numbered in accordance with the following table
+// from COM IDL & Interface Design, Dr. Al Major, page 107:
+//  _________________________________________________________________
+// | Bits    | Value                                                 |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 0  - 15 | Offset.  Any value is permissible.                    |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 16 - 21 | The nesting level of this type of information in the  |
+// |         | inheritance hierarchy.  The nesting level goes as     |
+// |         | follows: IUnknown = 0, IDispatch = 1, and any dual    |
+// |         | interface (inherits from IDispatch) or Automation = 2.|
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 22 - 25 | Reserved and must be ZERO.                            |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 26 - 28 | DISPID value.  Used to aggregate related DISPIDs.     |
+// |         | This value is typically 0 in user code.               |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// |    29   | TRUE if this is the ID for a method, otherwise FALSE, |
+// |         | This will always be 1 if you want to be consistent    |
+// |         | the numbering scheme for dual interfaces, which can   |
+// |         | only use this syntax for properties.                  |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 30 - 31 | Must be 01 (that is, positive)                        |
+// |_________|_______________________________________________________|
+//   
+// Example:
+// [propget] long lMyProp();
+// 
+// 0x60020001
+//    01     1  000   0000 000010 0000000000000001
+// |31 - 30|29|28-26|25-22|21-16 |15-0            |
+//
+
+// DECLARE_CUSTOM_NATIVE_TYPE_COLLECTION_INTERFACE
+//    defines the collection interface - for .idl
+//    
+//    This collection is to be used to native types
+//    like long, int, short, etc...
+//    
+// Usage:
+//
+// interface ICollection : IDispatch
+// {
+//    DECLARE_CUSTOM_NATIVE_TYPE_COLLECTION_INTERFACE(ExposedItemType, CustomEnumInterface)
+// };
+#define DECLARE_CUSTOM_NATIVE_TYPE_COLLECTION_INTERFACE(ExposedItemType, CustomEnumInterface) \
+      \
+		[propget, id(DISPID_VALUE), helpstring("property Item  --  Retrieves the Item* from index in the collection.")] \
+            HRESULT Item([in] long Index, [out, retval] ExposedItemType* Item); \
+		[propget, id(DISPID_NEWENUM), helpstring("property _NewEnum  --  Returns an IUnknown* which can be QI'd for IEnumVARIANT")] \
+            HRESULT _NewEnum([out, retval] IUnknown** EnumVARIANT); \
+		[propget, id(0x60020001), helpstring("method NewEnum  --  Retrieves an CustomEnumInterface interface pointer.")] \
+            HRESULT NewEnum([out, retval] CustomEnumInterface** Enum); \
+		[id(0x60020002), helpstring("method Add  --  Adds the Item* to the collection.")]  \
+            HRESULT Add([in] ExposedItemType* pItem); \
+		[id(0x60020003), helpstring("method Add  --  Inserts the Item* into the collection at the index.")]  \
+            HRESULT Insert([in] long Index, [in] ExposedItemType* Item); \
+		[id(0x60020004), helpstring("method Remove  --  Removes an entry from the collection.")]  \
+            HRESULT Remove([in] long Index); \
+		[id(0x60020005), helpstring("method Clear  --  Removes all elements from the collection.")]  \
+            HRESULT Clear();
+
+// DECLARE_CUSTOM_BSTR_COLLECTION_INTERFACE
+//    defines the collection interface - for .idl
+//    
+//    This collection is to be used for bstrs
+//    
+// Usage:
+//
+// interface ICollection : IDispatch
+// {
+//    DECLARE_CUSTOM_BSTR_COLLECTION_INTERFACE(ExposedItemType, CustomEnumInterface)
+// };
+#define DECLARE_CUSTOM_BSTR_COLLECTION_INTERFACE(ExposedItemType, CustomEnumInterface) \
+      \
+		[propget, id(DISPID_VALUE), helpstring("property Item  --  Retrieves the Item* from index in the collection.")] \
+            HRESULT Item([in] long Index, [out, retval] ExposedItemType* Item); \
+		[propget, id(DISPID_NEWENUM), helpstring("property _NewEnum  --  Returns an IUnknown* which can be QI'd for IEnumVARIANT")] \
+            HRESULT _NewEnum([out, retval] IUnknown** EnumVARIANT); \
+		[propget, id(0x60020001), helpstring("method NewEnum  --  Retrieves an CustomEnumInterface interface pointer.")] \
+            HRESULT NewEnum([out, retval] CustomEnumInterface** Enum); \
+		[id(0x60020002), helpstring("method Add  --  Adds the Item* to the collection.")]  \
+            HRESULT Add([in] ExposedItemType pItem); \
+		[id(0x60020003), helpstring("method Add  --  Inserts the Item* into the collection at the index.")]  \
+            HRESULT Insert([in] long Index, [in] ExposedItemType Item); \
+		[id(0x60020004), helpstring("method Remove  --  Removes an entry from the collection.")]  \
+            HRESULT Remove([in] long Index); \
+		[id(0x60020005), helpstring("method Clear  --  Removes all elements from the collection.")]  \
+            HRESULT Clear();
+
+// DECLARE_ICUSTOM_INTERFACE_COLLECTION_INTERFACE
+//    defines the collection interface - for .idl
+//    
+//    This collection is to be used to hold interface pointers
+// Usage:
+//
+// interface ICollection : IDispatch
+// {
+//    DECLARE_CUSTOM_INTERFACE_COLLECTION_INTERFACE(ExposedItemType, CustomEnumInterface)
+// };
+#define DECLARE_CUSTOM_INTERFACE_COLLECTION_INTERFACE(ExposedItemType, CustomEnumInterface) \
+      \
+      [propget, id(DISPID_VALUE), helpstring("property Item  --  Retrieves the ExposedItemType* from index in the collection.")] \
+            HRESULT Item([in]long Index, [out, retval]ExposedItemType** ppIVal); \
+      [propget, id(DISPID_NEWENUM), helpstring("property _NewEnum  --  Returns an IUnknown* which can be QI'd for IEnumVARIANT")] \
+            HRESULT _NewEnum([out, retval] IUnknown** pVal); \
+      [propget, id(0x60020001), helpstring("property Count  --  Provides the number of items in the collection.")] \
+            HRESULT Count([out, retval] long* pVal); \
+      [id(0x60020002), helpstring("method Clear  --  Removes all elements from the collection.")] \
+            HRESULT Clear(); \
+      [propget, id(0x60020003), helpstring("method NewEnum  --  Retrieves an CustomEnumInterface interface pointer.")] \
+            HRESULT NewEnum([out, retval]CustomEnumInterface** ppenum); \
+      [id(0x60020004), helpstring("method Add  --  Adds the ExposedItemType* to the collection.")] \
+            HRESULT Add( [in]ExposedItemType* pIVal); \
+	  [id(0x60020005), helpstring("method Remove  --  Removes an entry from the collection.")] \
+            HRESULT Remove([in] long kKey); 
+
+
+// DECLARE_ICUSTOM_INTERFACE_ENUM_INTERFACE 
+//    defines the enum interface -  for .idl
+// Usage:
+//
+// interface IEnumTest : IUnknown
+// {
+//    DECLARE_CUSTOM_INTERFACE_ENUM_INTERFACE(ExposedItemType, CustomEnumInterface)
+// };
+//
+// This enum interface needs to be derived from IUnknown
+// 
+// jer: 5/29/1999
+// Removed, this is not needed unless a local version is required
+//       [id(0x60010002), helpstring("method RemoteNext"), call_as(Next)] \
+//            HRESULT RemoteNext([in]ULONG celt, [out, size_is(celt), length_is(*pceltFetched)] 
+//			  ExposedItemType** rgelt, [out]ULONG* pceltFetched); \
+//
+#define DECLARE_CUSTOM_INTERFACE_ENUM_INTERFACE(ExposedItemType, CustomEnumInterface) \
+      \
+      [id(0x60010001), helpstring("method Next")] \
+            HRESULT Next([in]ULONG celt, [out]ExposedItemType** rgelt,[out]ULONG* pceltFetched); \
+      [id(0x60010002), helpstring("method Skip")] \
+            HRESULT Skip([in]ULONG celt); \
+      [id(0x60010003), helpstring("method Reset")] \
+            HRESULT Reset(); \
+      [id(0x60010004), helpstring("method Clone")] \
+            HRESULT Clone([out]CustomEnumInterface** ppenum);
+
+
+

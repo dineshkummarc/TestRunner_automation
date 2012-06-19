@@ -1,0 +1,31 @@
+# Microsoft Developer Studio Generated Dependency File, included by Test1.mak
+
+.\StdAfx.cpp : \
+	"..\..\..\..\..\program files\microsoft visual studio\vc98\include\basetsd.h"\
+	"..\TestCore.tlb"\
+	".\StdAfx.h"\
+	
+
+.\Test1.cpp : \
+	".\dlldatax.h"\
+	".\Test1.h"\
+	".\Test1_i.c"\
+	".\TestComponent1.h"\
+	".\TestComponent2.h"\
+	
+
+.\Test1.rc : \
+	".\TestComponent1.rgs"\
+	".\TestComponent2.rgs"\
+	
+
+.\TestComponent1.cpp : \
+	"..\cvCPropertyTester.h"\
+	".\Test1.h"\
+	".\TestComponent1.h"\
+	
+
+.\TestComponent2.cpp : \
+	".\Test1.h"\
+	".\TestComponent2.h"\
+	

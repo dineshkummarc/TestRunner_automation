@@ -1,0 +1,28 @@
+#!docjet_editor
+
+Root = \
+        'C:\\Program Files\\TallTree\\DocJet\\default.djt'
+FormatsToGenerate = \
+        'Internal\\\\HTML; New Standard\\\\HTML; New Standard\\\\HTMLHelp'
+
+[Warnings]
+
+[]
+
+[HookData]
+
+[Source]
+Project = 'ClinivisionTest.dsp'
+Wildcard = '.\\cvCOptionsDlg.cpp'
+Wildcard = '.\\OverView.gls'
+Wildcard = '.\\cvCOptionsDlg.h'
+
+[Exclusion]
+Wildcard = '.\\cvCSrvrItem.h'
+Wildcard = '.\\cvCSrvrItem.cpp'
+Wildcard = '.\\cvCInPlaceFrame.h'
+Wildcard = '.\\cvCInPlaceFrame.cpp'
+
+[Variable]
+
+[CommentSection]

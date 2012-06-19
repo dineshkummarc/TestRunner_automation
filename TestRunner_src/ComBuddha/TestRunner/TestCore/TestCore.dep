@@ -1,0 +1,138 @@
+# Microsoft Developer Studio Generated Dependency File, included by TestCore.mak
+
+.\cvCTestOutput.cpp : \
+	".\cvCDurationCounter.h"\
+	".\cvCTestOutput.h"\
+	".\cvIEnumTestSuiteItems.h"\
+	".\cvIEnumTestSuites.h"\
+	".\cvITestOutput.h"\
+	".\cvITestSuite.h"\
+	".\cvITestSuiteCollection.h"\
+	".\cvItestSuiteItem.h"\
+	".\cvITestSuiteItemCollection.h"\
+	".\cvSetValue.inl"\
+	".\TestCore.h"\
+	".\TestCoreXMLFormatDefs.h"\
+	
+
+.\cvCTestSuite.cpp : \
+	".\cvCTestSuite.h"\
+	".\cvIEnumTestSuiteItems.h"\
+	".\cvIEnumTestSuites.h"\
+	".\cvITestOutput.h"\
+	".\cvITestSuite.h"\
+	".\cvITestSuiteCollection.h"\
+	".\cvItestSuiteItem.h"\
+	".\cvITestSuiteItemCollection.h"\
+	".\TestCore.h"\
+	
+
+.\cvCTestSuiteItem.cpp : \
+	".\cvCTestSuiteItem.h"\
+	".\cvIEnumTestSuiteItems.h"\
+	".\cvIEnumTestSuites.h"\
+	".\cvITestOutput.h"\
+	".\cvITestSuite.h"\
+	".\cvITestSuiteCollection.h"\
+	".\cvItestSuiteItem.h"\
+	".\cvITestSuiteItemCollection.h"\
+	".\cvSetValue.inl"\
+	".\TestCore.h"\
+	
+
+.\StdAfx.cpp : \
+	"..\..\..\..\program files\microsoft visual studio\vc98\include\basetsd.h"\
+	".\include\cverror.h"\
+	".\include\generalerror.h"\
+	".\StdAfx.h"\
+	
+
+.\TestCore.cpp : \
+	".\cvCDurationCounter.h"\
+	".\cvCTestOutput.h"\
+	".\cvCTestSuite.h"\
+	".\cvCTestSuiteCollection.h"\
+	".\cvCTestSuiteItem.h"\
+	".\cvCTestSuiteItemCollection.h"\
+	".\cvIEnumTestSuiteItems.h"\
+	".\cvIEnumTestSuites.h"\
+	".\cvITest.h"\
+	".\cvITestOutput.h"\
+	".\cvITestOutput_i.c"\
+	".\cvITestSuite.h"\
+	".\cvITestSuite_i.c"\
+	".\cvITestSuiteCollection.h"\
+	".\cvITestSuiteCollection_i.c"\
+	".\cvItestSuiteItem.h"\
+	".\cvItestSuiteItem_i.c"\
+	".\cvITestSuiteItemCollection.h"\
+	".\cvITestSuiteItemCollection_i.c"\
+	".\cvSetValue.inl"\
+	".\dlldatax.h"\
+	".\include\cvcomcollections.h"\
+	".\include\cvcomcopypolicies.h"\
+	".\TestCore.h"\
+	".\TestCore_i.c"\
+	".\TestCoreXMLFormatDefs.h"\
+	
+
+.\TestCore.idl : \
+	".\cvITest.idl"\
+	
+
+.\TestCoreXMLFormatDefs.cpp : \
+	".\TestCoreXMLFormatDefs.h"\
+	
+
+.\TestCore.rc : \
+	".\cvCTest.rgs"\
+	".\cvCTestOutput.rgs"\
+	".\cvCTestSuite.rgs"\
+	".\cvCTestSuiteCollection.rgs"\
+	".\cvCTestSuiteItem.rgs"\
+	".\cvCTestSuiteItemCollection.rgs"\
+	
+
+.\cvIEnumTestSuiteItems.idl : \
+	".\Include\cvEnumCollectionHelper.idl"\
+	
+
+.\cvIEnumTestSuites.idl : \
+	".\Include\cvEnumCollectionHelper.idl"\
+	
+
+.\cvITestSuiteCollection.idl : \
+	".\Include\cvEnumCollectionHelper.idl"\
+	
+
+.\cvITestSuiteItemCollection.idl : \
+	".\Include\cvEnumCollectionHelper.idl"\
+	
+
+.\cvCTestSuiteCollection.cpp : \
+	".\cvCTestSuiteCollection.h"\
+	".\cvIEnumTestSuiteItems.h"\
+	".\cvIEnumTestSuites.h"\
+	".\cvITestOutput.h"\
+	".\cvITestSuite.h"\
+	".\cvITestSuiteCollection.h"\
+	".\cvItestSuiteItem.h"\
+	".\cvITestSuiteItemCollection.h"\
+	".\include\cvcomcollections.h"\
+	".\include\cvcomcopypolicies.h"\
+	".\TestCore.h"\
+	
+
+.\cvCTestSuiteItemCollection.cpp : \
+	".\cvCTestSuiteItemCollection.h"\
+	".\cvIEnumTestSuiteItems.h"\
+	".\cvIEnumTestSuites.h"\
+	".\cvITestOutput.h"\
+	".\cvITestSuite.h"\
+	".\cvITestSuiteCollection.h"\
+	".\cvItestSuiteItem.h"\
+	".\cvITestSuiteItemCollection.h"\
+	".\include\cvcomcollections.h"\
+	".\include\cvcomcopypolicies.h"\
+	".\TestCore.h"\
+	

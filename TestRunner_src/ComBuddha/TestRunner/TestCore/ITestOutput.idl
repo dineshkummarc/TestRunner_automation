@@ -1,0 +1,126 @@
+// 
+//                Jerry Edens & Doug Eveland
+//         Copyright(c) 1999 All Rights Reserved 
+// 
+// This code may be used in compiled form for non-profit
+// purposes and the source code may be redistributed 
+// unmodified by any means providing it is not sold for 
+// profit, unless written consent is granted by the 
+// authors, and providing that this notice and the 
+// authors names are included.
+//
+// If you find any bugs or make any modifications please
+// send them to me for incorporation into the code.
+//
+// This file is provided "as is" with out expressed or 
+// implied warranty.
+//
+// Contact me if you have any questions, comments, or 
+// bug reports at jerrye@home.com
+//
+// 
+// ----------------------[ Revision Control ]---------------------------
+// $Archive: $
+// $Revision: 9$
+// $Author: Jerry Edens$
+// $Date: 11/18/99 2:15:44 PM$
+// $Modtime: $
+// $NoKeywords: $
+// ---------------------------------------------------------------------
+//
+
+// 
+// The dispid's are numbered in accordance with the following table
+// from COM IDL & Interface Design, Dr. Al Major, page 107:
+//   
+// or
+// 
+// MSDN  Midl Language Reference : search for id
+//
+//  _________________________________________________________________
+// | Bits    | Value                                                 |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 0  - 15 | Offset.  Any value is permissible.                    |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 16 - 21 | The nesting level of this type of information in the  |
+// |         | inheritance hierarchy.  The nesting level goes as     |
+// |         | follows: IUnknown = 0, IDispatch = 1, and any dual    |
+// |         | interface (inherits from IDispatch) or Automation = 2.|
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 22 - 25 | Reserved and must be ZERO.                            |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 26 - 28 | DISPID value.  Used to aggregate related DISPIDs.     |
+// |         | This value is typically 0 in user code.               |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// |    29   | TRUE if this is the ID for a method, otherwise FALSE, |
+// |         | This will always be 1 if you want to be consistent    |
+// |         | the numbering scheme for dual interfaces, which can   |
+// |         | only use this syntax for properties.                  |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 30 - 31 | Must be 01 (that is, positive)                        |
+// |_________|_______________________________________________________|
+//   
+// Example:
+// [propget] long lMyProp();
+// 
+// 0x60020001
+//    01     1  000   0000 000010 0000000000000001
+// |31 - 30|29|28-26|25-22|21-16 |15-0            |
+//
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+//	Group = Support Interfaces
+
+	[
+		object,
+		uuid(967013C1-827E-11d3-ABF5-00508B0D0D6E),
+		dual,
+		helpstring("ISuppotTestOutput Interface"),
+		pointer_default(unique)
+	]
+	interface ISupportTestOutput : IDispatch
+	{
+		[id(0x60020001), helpstring("method LogResult - Logs the incoming message, a callback method.")] 
+				HRESULT LogResult([in] BSTR bstrMessage);
+	};
+
+//	Group = Core Interfaces
+
+	[
+		object,
+		uuid(74CDEBE3-818D-11D3-ABF5-00508B0D0D6E),
+		dual,
+		helpstring("ITestOutput Interface"),
+		pointer_default(unique)
+	]
+	interface ITestOutput : IDispatch
+	{
+		//#define VARIANT_TRUE ((VARIANT_BOOL)0xffff)
+		//#define VARIANT_FALSE ((VARIANT_BOOL)0)
+
+		[id(0x60020001), helpstring("method StartTimer - Starts the time accumulation for the test")] 
+				HRESULT LogStartTime();
+		[id(0x60020002), helpstring("method StopTimer - Stops the time accumlation for the test")] 
+				HRESULT LogStopTime();
+		[id(0x60020003), helpstring("method LogResult - Logs the incoming message")] 
+				HRESULT LogResult([in] BSTR bstrMessage, [in, optional] HRESULT hrError);
+		[id(0x60020004), helpstring("method AddListener")] 
+				HRESULT AddListener([in] ISupportTestOutput* pSupportTestOutput);
+		[propget, id(0x60020005), helpstring("property LogFileName - The name (including path) of the file to place the logs on.")] 
+				HRESULT LogFileName([out, retval] BSTR *pLogFileName);
+		[propput, id(0x60020005), helpstring("property LogFileName - The name (including path) of the file to place the logs on.")] 
+				HRESULT LogFileName([in] BSTR newLogFileName);
+		[propget, id(0x60020006), helpstring("property TestName - The name of the test.")] 
+				HRESULT TestName([out, retval] BSTR *pTestName);
+		[propput, id(0x60020006), helpstring("property TestName - The name of the test.")] 
+				HRESULT TestName([in] BSTR newTestName);
+	};
+

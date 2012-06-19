@@ -1,0 +1,101 @@
+// 
+//                Jerry Edens & Doug Eveland
+//         Copyright(c) 1999 All Rights Reserved 
+// 
+// This code may be used in compiled form for non-profit
+// purposes and the source code may be redistributed 
+// unmodified by any means providing it is not sold for 
+// profit, unless written consent is granted by the 
+// authors, and providing that this notice and the 
+// authors names are included.
+//
+// If you find any bugs or make any modifications please
+// send them to me for incorporation into the code.
+//
+// This file is provided "as is" with out expressed or 
+// implied warranty.
+//
+// Contact me if you have any questions, comments, or 
+// bug reports at jerrye@home.com
+//
+// ----------------------[ Revision Control ]---------------------------
+// $Author: Jerry Edens$
+// $Date: 11/15/99 10:38:05 AM$
+// $Modtime: $
+// $NoKeywords: $
+// ---------------------------------------------------------------------
+//
+
+// 
+// The dispid's are numbered in accordance with the following table
+// from COM IDL & Interface Design, Dr. Al Major, page 107:
+//   
+// or
+// 
+// MSDN  Midl Language Reference : search for id
+//
+//  _________________________________________________________________
+// | Bits    | Value                                                 |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 0  - 15 | Offset.  Any value is permissible.                    |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 16 - 21 | The nesting level of this type of information in the  |
+// |         | inheritance hierarchy.  The nesting level goes as     |
+// |         | follows: IUnknown = 0, IDispatch = 1, and any dual    |
+// |         | interface (inherits from IDispatch) or Automation = 2.|
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 22 - 25 | Reserved and must be ZERO.                            |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 26 - 28 | DISPID value.  Used to aggregate related DISPIDs.     |
+// |         | This value is typically 0 in user code.               |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// |    29   | TRUE if this is the ID for a method, otherwise FALSE, |
+// |         | This will always be 1 if you want to be consistent    |
+// |         | the numbering scheme for dual interfaces, which can   |
+// |         | only use this syntax for properties.                  |
+// |_________|_______________________________________________________|
+// |         |                                                       |
+// | 30 - 31 | Must be 01 (that is, positive)                        |
+// |_________|_______________________________________________________|
+//   
+// Example:
+// [propget] long lMyProp();
+// 
+// 0x60020001
+//    01     1  000   0000 000010 0000000000000001
+// |31 - 30|29|28-26|25-22|21-16 |15-0            |
+//
+
+//	Group = Core Interfaces
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+	[
+		object,
+		uuid(5A559D11-8291-11d3-ABF6-00508B0D0D6E),
+		dual,
+		helpstring("IDirectLoad Interface"),
+		pointer_default(unique)
+	]
+	//	
+	//	Description:
+	//		Defines the methods needed by those classes which need to be loaded
+	//		from the Windows Registry.
+	//	
+	interface IDirectLoad : IDispatch
+	{
+		[id(1), helpstring("method LoadFromRegistry - Directs the component to read in it's data from the registry")] 
+				HRESULT LoadFromRegistry();
+	};
+
+
+
+
+

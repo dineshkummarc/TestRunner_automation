@@ -1,0 +1,587 @@
+>Test Core Classes
+{group:Test Runner}
+The target consumer for the Test Core classes is Test Runner and any class which
+is to be tested using the test runner program.  Test Runner makes use of the 
+core classes for retrieving the information about all components (on the same machine 
+Test Runner is running) registered in the component category under CATID_Test.  
+CATID_Test is the English alias for GUID {50105161-8295-11d3-ABF6-00508B0D0D6E}, defined
+in CTestSuiteItemCollection.cpp.
+
+The Test Core classes are broken out into four different areas of functionality: 
++ Gathering, holding, and providing information about components in the category
++ Defining the ITest interface.  This interface is implemented by any class which 
+    is to run under Test Runner.
++ Helper or Utility classes.  Classes such as CPropertyTester and CDurationCounter.
++ Defining the ISupportTestOutput interface.  This interface is implemented by 
+    any class which is to receive the output from CTestOutput.
+
+The ITestOutput outputs the log file in XML format as described below:
+
+{html:<h3>}Log File Format{html:</h3>}
+{html:<h4>}The log file uses the following tags:{html:</h4>}
+{html:<ul>}
+{html:<li><b>}
+<TESTRESULTS>
+{html:</b><br>}
+Wraps the entire set of test results for duration of the Run method.
+{html:</li>}
+{html:<li><b>}
+<OPENTIME>
+{html:</b><br>}
+The time the log file was created and opended for writing.
+{html:</li>}
+{html:<li><b>}
+<RESULTENTRY>
+{html:</b><br>}
+Wraps all the entries between the start and stop times of a test.
+{html:</li>}
+{html:<li><b>}
+<STARTTIME>
+{html:</b><br>}
+The time the test was started.
+{html:</li>}
+{html:<li><b>}
+<TESTNAME>
+{html:</b><br>}
+The name of the test.
+{html:</li>}
+{html:<li><b>}
+<MESSAGE>
+{html:</b><br>}
+A non-error message about the test.
+{html:</li>}
+{html:<li><b>}
+<FAULT>
+{html:</b><br>}
+An error message about the test
+{html:</li>}
+{html:<li><b>}
+<DURATION>
+{html:</b><br>}
+The duration of the test.  The amount of time between the start and stop times.
+{html:</li>}
+{html:<li><b>}
+<CLOSETIME>
+{html:</b><br>}
+The time the log file is closed for writing.
+{html:</li>}
+{html:</ul>}
+
+{html:<h4>}The following in an example output of a test:{html:</h4>} 
+{html:<br>}
+{html:<pre>}
+            <?xml version="1.0"?>
+            <?xml:stylesheet type="text/xsl" href="c:\TestOutput.xsl"?>
+               
+            <TESTRESULTS>
+               <OPENTIME>
+                  Thu, Nov 18, 1999 at 11:57::44   
+            </OPENTIME>
+               
+               <RESULTENTRY>
+                  <STARTTIME>
+                     Thu, Nov 18, 1999 at 11:57::44
+                  </STARTTIME>
+               
+                  <TESTNAME>
+                     TestOutput
+                  </TESTNAME>
+               
+                  <MESSAGE>
+                     Testing TestOutput
+                  </MESSAGE>
+               
+                  <MESSAGE>
+                     All is well...
+                  </MESSAGE>
+               
+                  <ENDTIME>
+                     Thu, Nov 18, 1999 at 11:57::44
+                  </ENDTIME>
+               
+                  <DURATION>
+                       0 Sec, 000 mSec, 585 uSec
+                  </DURATION>
+               
+               </RESULTENTRY>
+               
+               <CLOSETIME>
+                  Thu, Nov 18, 1999 at 11:57::44, with a total duration of   0 Sec, 019 mSec, 525 uSec   
+            </CLOSETIME>
+            </TESTRESULTS>
+               
+{html:</pre>}
+
+{html:<h4>}The following in an example of the Style sheet used to format the XML:{html:</h4>} 
+{html:<br>}
+{html:<pre>}
+        <?xml version="1.0" ?> 
+        <xsl:stylesheet xmlns:xsl="http://www.w3.org/TR/WD-xsl">
+        
+           <xsl:template match="//">
+              <xsl:define-template-set>
+        
+                 <xsl:template match="RESULTENTRY">
+                    <table bgcolor='f0 f0 f0' bordercolor='b0 b0 b0' border='1' width='100%'>
+                       <th bgcolor='d0 d0 d0'>Test Name</th>
+                       <th bgcolor='d0 d0 d0'>Test Start Time</th>
+                       <th bgcolor='d0 d0 d0'>Test End Time</th>
+                       <th bgcolor='d0 d0 d0'>Test Duration</th>
+                    <tr><xsl:apply-templates select="TESTNAME" />
+                        <xsl:apply-templates select="STARTTIME" />
+                        <xsl:apply-templates select="ENDTIME" />
+                        <xsl:apply-templates select="DURATION" /> </tr>
+                    <tr><xsl:apply-templates select="MESSAGE" /> </tr>
+                    <tr><xsl:apply-templates select="FAULT" /> </tr>
+                    </table>
+                    <br />
+                 </xsl:template>
+        
+                 <xsl:template match="OPENTIME">    
+                      <DIV STYLE="font-family:arial;font-size:10pt;color:blue;margin-left:.33cm"> 
+                          <h2><center>Log file open for business on <xsl:value-of/></center></h2> <br /> <br />
+                      </DIV>
+                 </xsl:template>
+        
+                 <xsl:template match="CLOSETIME">   
+                      <SPAN STYLE="font-family:arial;font-size:10pt;color:blue"> 
+                          <br /><h2><center>Log file closed for business on <xsl:value-of/></center></h2> <br /> <br /> 
+                      </SPAN> 
+                 </xsl:template> 
+        
+              </xsl:define-template-set> 
+              <xsl:apply-templates /> 
+           </xsl:template> 
+        
+           <xsl:template match="TESTNAME">  
+              <td bgcolor='ef ef ff'>
+                    <xsl:value-of />
+              </td>
+           </xsl:template>
+        
+           <xsl:template match="MESSAGE"> 
+              <tr><td bordercolor='ff ff ff' cellspacing='0' bgcolor='ff ff ff' colspan='4'>
+                 <xsl:value-of />
+              </td></tr>
+           </xsl:template> 
+        
+           <xsl:template match="FAULT"> 
+              <tr><td bordercolor='ff 00 00' cellspacing='0' bgcolor='df 00 00' colspan='4'> <font color='white'>
+                 <xsl:value-of />
+              </font></td></tr>
+           </xsl:template> 
+        
+           <xsl:template match="STARTTIME"> 
+              <td bgcolor='ef ef ff'>
+                 <xsl:value-of />
+              </td>
+           </xsl:template> 
+        
+           <xsl:template match="ENDTIME"> 
+              <td bgcolor='ef ef ff'>
+                 <xsl:value-of />
+              </td>
+           </xsl:template> 
+        
+           <xsl:template match="DURATION"> 
+              <td bgcolor='ef ef ff'>
+                 <xsl:value-of />
+              </td>
+           </xsl:template> 
+           
+        </xsl:stylesheet>
+           
+{html:</pre>}
+{html:<br>}
+
+This result of combining the XML and XSL: 
+
+{image:XMLOutput}
+
+>Collections
+{group:Test Core Classes}
+The Collections are STL based containers which hold interface pointers in the form of
+CAdapt< CComPtr< xxx > >.  
+
++ CTestSuiteCollection - a collection of ITestSuites
++ CTestSuiteItemCollection - a collection of ITestSuiteItems
+
+>Helper Classes
+{group:Test Runner}
+
+The Helper classes are used to aid the application or component with
+it's purpose.  These classes exist on there own and are not specific to 
+Test Runner.
+
+>Interfaces
+{group:Test Core Classes}
+
+The support interfaces are those which were created for use by other components that
+wish to play well with test runner.
+
++ ISupportTestOutput is used by components which need to recieve feedback from the 
+CTestOutput component.
++ ITest is implemented by components which need to be tested by Test Runner. 
+
+>A Hitch Hikers Guide to ITest
+{group:Test Core Classes}
+{html:<h3>}Introduction{html:</h3>}
+ITest? What is ITest? Ahhh, good question, ITest is the interface which Test 
+Runner requires all test items to implement. This interface is used by 
+Test Runner to test one or more objects, an Object being loosely defined as 
+any executable. 
+
+{html:<h3>}Test Items (components){html:</h3>}
+A test item is any COM component which implements the ITest interface and 
+is registered in the Component Category under 
+{50105161-8295-11d3-ABF6-00508B0D0D6E}.
+
+{html:<table border='0' width='75%'><th bgcolor = 'e0 e0 e0'>}
+A test component has the following requirements:{html:</th>}
+{html:<ul>}
+{html:<tr><td><li>}Must be a COM component.{html:</li></td></tr>}
+{html:<tr><td><li>}Implements the ITest interface.{html:</li></td></tr>}
+{html:<tr><td><li>}Use ITestOutput to start and stop the timing for the test.{html:</li></td></tr>}
+{html:</ul>}
+{html:</table>}
+
+{html:<table border='0' width='75%'><th bgcolor = 'e0 e0 e0'>}
+A test component has the following {html:<b>}optional{html:</b>} requirements:{html:</th>}
+{html:<ul>}
+{html:<tr><td><li>}Log intermediate results using ITestOutput::LogResult{html:</li></td></tr>}
+{html:<tr><td><li>}Use ProperyTester for automated testing of a COM components properties. 
+    (The interface being tested must implement the IDispatch interface.){html:</li></td></tr>}
+{html:</ul>}
+{html:</table>}
+
+By using components to perform the tests, the Test Runner application is able to perform
+tests on a set (suite) of test items without having knowledge of what the test items
+are testing.  The test items can be smoke tests, black box tests, or white box tests.  This 
+provides great flexability for generating suites of tests.
+
+{html:<h3>}ITest Interface{html:</h3>}
+The ITest interface provides the test runner application with
+a known interface for communicating with test components.  So, any 
+component which implements the ITest interface can be executed
+by the test runner application.
+
+The test component is responible for defining three methods:
+
+{html:<p>}
+The setup and clean up methods:
+{html:<p>}
+{html:<ul><li><b>}HRESULT StartUp([in] ITestOutput* pTestOutput);{html:</b></li>}
+{html:<li><b>}HRESULT ShutDown([in] ITestOutput* pTestOutput);{html:</b></li></ul>}
+
+{html:<br>}
+These two methods are used for performing initialization and cleanup for the test.
+If a test is to be run more than once it may not need to be initialzed for each test
+but, only once for all tests.  
+
+{html:<p>}
+The test method:
+
+{html:<ul><li><b>}HRESULT Run([in] ITestOutput* pTestOutput, 
+[in] VARIANT runParameter);{html:</b></li></ul>}
+
+{html:<p>}
+The ITest::Run() method, this method is where the test is performed.  
+It is within this method that the 'objects' to be tested are 
+instantiated and tested.  
+
+The first parameter of ITest::Run is a pointer to a ITestOutput.  The 
+ITestOutput is used for logging the results to a file and the UI.  
+
+The second parameter of ITest::Run is a VARIANT.  This is not used currently
+but, is intended to allow us to execute the same test with different parameters.
+
+The following is an example of how to define the ITest::Run method:
+
+{html:<h4>}Example of ITest::Run(){html:</h4>}
+
+{html:<pre>}
+        STDMETHODIMP CTestComponent1::Run(ITestOutput* pTestOutput, VARIANT runParameter)
+        {
+           ATLASSERT(pTestOutput != NULL);
+           ATLASSERT(!::IsBadReadPtr(pTestOutput, sizeof(ITestOutput*)));
+           
+           // Without a test output there is no way to log the results so,
+           // no reason to conduct the test.
+           if(pTestOutput)
+           {  
+              //
+              // Test a non-COM object, in this case we use a c++ class.
+              //
+
+              // Create a c++ object to be tested.
+              Cfoo foo;
+              pTestOutput->LogStartTime();
+              //
+              pTestOutput->LogResult(CComBSTR(L"Tesing CFoo"), S_OK);
+              HRESULT hr = S_OK;
+              hr = foo.CheckValue(5);
+              // The actions taken here is the responsibility of the 
+              // test component writer.
+              if(FAILED(hr))
+              {
+                 // The hr indicates that an error occured.
+				     // Passing in S_OK indicates success.
+                 pTestOutput->LogResult(_bstr_t(L"This is a failure"), hr);
+              }
+              // Stop the test time clock   
+              pTestOutput->LogStopTime();
+           
+              //
+              // Test a COM object, in this case we use ITestSuiteItem
+              //
+
+              // Create a COM component to be tested
+              CComPtr<ITestSuiteItem> pItem;
+              HRESULT hr = pItem.CoCreateInstance(L"TestCore.CTestSuiteItem.1");
+              if(FAILED(hr))
+              {
+                 pTestOutput->LogResult(L"Creating the ITestSuiteItem failed", hr);
+                 return hr;
+              }
+           
+              // Start the test time
+              pTestOutput->LogStartTime();
+                 
+              pTestOutput->LogResult(CComBSTR(L"Testing ITestSuiteItem"), S_OK);
+              // This how to log a failure.
+              pTestOutput->LogResult(_bstr_t(L"This is a failure"), S_OK);
+              
+              // ITestSuiteItem is an IDispatch interface so perform and automated test of
+              // it's properties.
+              CPropertyTester ta;
+              ta.TestProperties(pTestOutput, static_cast<IDispatch*>(pItem));
+              
+              // Stop the test and log it.
+              pTestOutput->LogStopTime();
+           
+              // When the test is in a tight loop, be friendly to scripting and sleep once in awhile.
+              //::Sleep(1);      
+           }
+           
+           return(S_OK);
+        }
+{html:</pre>}
+
+See below for more information on ITestOutput.
+
+{html:<h3>}ITestOutput Interface{html:</h3>}
+The ITestOutput interface is used to log results to a file, and send the same 
+unformmatted (the log file is in XML format) results to the GUI for display and 
+exsposes the following methods:
+
+{html:<ul>}
+{html:<li><b>}
+HRESULT LogStartTime();
+{html:</b><br>}
+Called prior to starting a test.  Causes the start time to be logged and sent to
+the UI.
+{html:</li>}
+
+{html:<li><b>}
+HRESULT LogStopTime();
+{html:</b><br>}
+Called when the test is complete.  Causes the stop time and duration of the test to 
+be logged and sent to the UI.
+{html:</li>}
+
+{html:<li><b>}
+HRESULT LogResult([in] BSTR bstrMessage, [in, optional, defaultvalue(0)] VARIANT_BOOL bError);
+{html:</b><br>}
+Causes a message to logged and sent to the UI.  If the bError is true then the message
+is interpreted as an error.
+{html:</li>}
+
+{html:<li><b>}
+HRESULT AddListener([in] ISupportTestOutput* pSupportTestOutput);
+{html:</b><br>}
+This is used by the UI so that the message can be sent to the UI for
+display.
+{html:</li>}
+
+{html:<li><b>}
+HRESULT LogFileName([out, retval] BSTR *pLogFileName);
+{html:</b><br>}
+HRESULT LogFileName([in] BSTR newLogFileName);
+{html:<br>}
+This is the file name used for the log file.  
+{html:</li>}
+
+{html:<li><b>}
+HRESULT TestName([out, retval] BSTR *pTestName);
+{html:</b><br>}
+HRESULT TestName([in] BSTR newTestName);
+{html:<br>}
+This is the name of the test being logged and executed.
+{html:</li>}
+
+{html:</ul>}
+
+{html:<h3>}RGS? Do we need a stinken RGS?{html:</h3>}
+The test core components must have knowledge of which components support the 
+ITest interface.  This is accomplished through the use of the component
+categories.  Component Categories is (see Chap. 3, pg 147 of Essential COM)
+a place in the Windows registry where components which support a particular
+interface or set of interfaces can register as a group.  
+
+{html:<i>}Example:  
+If there Is an interface called ISpellCheck, all spell checking components 
+regsister under the CLSID_SpellCheck category and any application that 
+knows how to use the ISpellCheck interface can select one of the components 
+from that category to perform the spell checking.Registration is accomplished 
+by updating the .rgs file.  The following is an example of an updated rgs file.
+{html:</i>}
+
+        HKCR
+        {
+            Test1.TestComponent1.1 = s 'TestComponent1 Class'
+            {
+                CLSID = s '{EC86425F-8321-11D3-ABF8-00508B0D0D6E}'
+            }
+            Test1.TestComponent1 = s 'TestComponent1 Class'
+            {
+                CLSID = s '{EC86425F-8321-11D3-ABF8-00508B0D0D6E}'
+                CurVer = s 'Test1.TestComponent1.1'
+            }
+            NoRemove CLSID
+            {
+                ForceRemove {EC86425F-8321-11D3-ABF8-00508B0D0D6E} = s 'TestComponent1 Class'
+                {
+                    ProgID = s 'Test1.TestComponent1.1'
+                    VersionIndependentProgID = s 'Test1.TestComponent1'
+                    ForceRemove 'Programmable'
+                    'Implemented Categories' = s ''
+                    {
+                        {50105161-8295-11d3-ABF6-00508B0D0D6E} = s 'Automated Test (ITest)'
+                    }
+                    InprocServer32 = s '%MODULE%'
+                    {
+                        val ThreadingModel = s 'Apartment'
+                    }
+                    'TypeLib' = s '{EC864250-8321-11D3-ABF8-00508B0D0D6E}'
+                    'Test Information' = s ''
+                    {
+                        val TestName = s 'TestComponent1'
+                        val Description = s 'Automated Test for TestComponent1'
+                    }
+                }
+            }
+            NoRemove 'Component Categories'
+            {           
+               NoRemove {50105161-8295-11d3-ABF6-00508B0D0D6E} 
+               {
+                  val 409 = s 'Automated Test (ITest)'
+               }
+            }
+        }
+
+{html:<h3>}Step by Step{html:</h3>}
+The following steps are used for creating an object which supports
+the ITest interface...
+
+{html:<h4>}Prerequisites{html:</h4>}
+{html:<ol>}
+{html:<li>}
+IE5.0 must be installed on the machine.  This is required to support the 
+use of msxml.dll (XML support).
+{html:</li>}
+
+{html:<li>}
+Create a new ATL Object to be used as the test component.
+{html:</li>}
+
+{html:<li>}
+Right click on the class and select implement interface.
+{html:</li>}
+
+{html:<li>}
+This brings up the Implement Interface dialog.  Press the Add TypeLib button.
+{html:</li>}
+
+{html:<li>}
+Select TestCore from this list by checking the check box.
+{html:</li>}
+
+{html:<li>}
+Check the check box next to ITest, then press the OK button.
+{html:</li>}
+
+{html:<li>}
+You are now ready to add custom functionality to Run().
+{html:</li>}
+
+{html:<li>}
+{html:<pre>}
+The rgs example below shows where the changes need to be made:  
+
+            a)  Make modifications in the areas indicated by '--->':
+            b)  The CATID_GUID is = {50105161-8295-11d3-ABF6-00508B0D0D6E}
+            
+            NoRemove CLSID
+            {
+                ForceRemove {nnnnnnnn-nnnn-nnnn-nnnn-nnnnnnnnnnnn} = s 'xxx'
+                {
+                    ProgID = s 'xxx'
+                    VersionIndependentProgID = s 'xxx'
+                    ForceRemove 'Programmable'
+        --->        'Implemented Categories' = s ''
+        --->        {
+        --->            {50105161-8295-11d3-ABF6-00508B0D0D6E} = s 'Automated Test (ITest)'
+        --->        }
+                    InprocServer32 = s '%MODULE%'
+                    {
+                        val ThreadingModel = s 'Apartment'
+                    }
+                    'TypeLib' = s '{EC864250-8321-11D3-ABF8-00508B0D0D6E}'
+        --->        'Test Information' = s ''
+        --->        {
+        --->            val TestName = s 'A test name'
+        --->            val Description = s 'A description'
+        --->        }
+                }
+            }
+        --->NoRemove 'Component Categories'
+        --->{           
+        --->    NoRemove {50105161-8295-11d3-ABF6-00508B0D0D6E}
+        --->    {
+        --->        val 409 = s 'Automated Test (ITest)'
+        --->    }
+        --->}
+{html:</pre>}
+{html:</li>}
+
+{html:</ol>}
+
+{html:<h3>}Notes{html:</h3>}
+{html:<ol>}
+{html:<li>}
+        409 is the LCID for english.
+{html:</li>}
+
+{html:<li>}
+        The automation test GUID is {50105161-8295-11d3-ABF6-00508B0D0D6E}
+{html:</li>}
+
+{html:</ol>}
+
+>Core Classes
+{group:Test Core Classes}
+
+>Support Interfaces
+{group:Interfaces}
+
+>Core Interfaces
+{group:Interfaces}
+
+>Collection Interfaces
+{group:Interfaces}
+    
+
+
+
+
+
